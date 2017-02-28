@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.defensiveassert;
+package com.github.doi9t.defensiveassert;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;

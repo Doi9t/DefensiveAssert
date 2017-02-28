@@ -16,7 +16,6 @@
 
 package com.github.doi9t.defensiveassert;
 
-import com.github.defensiveassert.Assert;
 import com.github.doi9t.defensiveassert.utils.EmptyObj;
 import org.junit.Test;
 
