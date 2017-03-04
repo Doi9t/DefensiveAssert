@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package com.github.doi9t.defensiveassert;
+package ca.watier.defensiveassert;
 
-import com.github.doi9t.defensiveassert.utils.EmptyObj;
+import ca.watier.defensiveassert.utils.EmptyObj;
 import org.junit.Test;
 
 import java.util.*;

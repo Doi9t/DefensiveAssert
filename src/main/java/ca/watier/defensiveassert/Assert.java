@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.doi9t.defensiveassert;
+package ca.watier.defensiveassert;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -68,17 +68,11 @@ public class Assert {
         } else if (!isString && !isArray && !isMap && !isCollection) {
             try {
                 Class<?> clazz = obj.getClass();
+                Method isEmptyMethod = clazz.getMethod("isEmpty");
+                Boolean isEmpty = (Boolean) isEmptyMethod.invoke(obj);
 
-                if (!clazz.isPrimitive()) {
-                    Method isEmptyMethod = clazz.getMethod("isEmpty");
-
-                    Boolean isEmpty = (Boolean) isEmptyMethod.invoke(obj);
-
-                    if (isEmpty == null || isEmpty) {
-                        throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, clazz.getSimpleName()));
-                    }
-                } else {
-                    throw new IllegalArgumentException("Unable to find if the object is empty (with reflection)");
+                if (isEmpty == null || isEmpty) {
+                    throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, clazz.getSimpleName()));
                 }
             } catch (Exception e) {
                 throw new IllegalArgumentException(e);

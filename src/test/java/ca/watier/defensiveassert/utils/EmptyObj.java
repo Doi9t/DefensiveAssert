@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.doi9t.defensiveassert.utils;
+package ca.watier.defensiveassert.utils;
 
 /**
  * Created by yannick on 2/27/2017.
