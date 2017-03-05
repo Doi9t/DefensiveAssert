@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package ca.watier.defensiveassert;
+package ca.watier.defassert;
 
-import ca.watier.defensiveassert.utils.EmptyObj;
+import ca.watier.defassert.utils.EmptyObj;
 import org.junit.Test;
 
 import java.util.*;
@@ -48,6 +48,12 @@ public class AssertTest {
     public void mustBeofType() {
 
         boolean isTestPassed = true;
+
+        try {
+            Assert.mustBeofType(5);
+        } catch (IllegalArgumentException iae) {
+            isTestPassed = true;
+        }
 
         try {
             Assert.mustBeofType(10, Integer.class);

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package ca.watier.defensiveassert;
+package ca.watier.defassert;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -28,15 +28,26 @@ import java.util.Map;
 public class Assert {
     private static final String CANNOT_BE_EMPTY = "The %s cannot be empty !";
 
+    /**
+     * Check if the object is null, throw an exception if it is the case.
+     * @param obj
+     * @throws IllegalArgumentException
+     */
     public static void notNull(Object obj) throws IllegalArgumentException {
         if (obj == null) {
             throw new IllegalArgumentException("The object cannot be null !");
         }
     }
 
+    /**
+     * Check if the object is of the type (class), throw an exception if not the case.
+     * @param obj
+     * @param type
+     * @throws IllegalArgumentException
+     */
     public static void mustBeofType(Object obj, Class<?>... type) throws IllegalArgumentException {
         notNull(obj);
-        notNull(type);
+        notEmpty(type);
 
         if (!Arrays.asList(type).contains(obj.getClass())) {
             throw new IllegalArgumentException("The object is not of the requested type !");

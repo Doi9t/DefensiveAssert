@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package ca.watier.defensiveassert.utils;
+package ca.watier.defassert.utils;
 
 /**
  * Created by yannick on 2/27/2017.
