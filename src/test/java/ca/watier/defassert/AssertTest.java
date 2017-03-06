@@ -27,50 +27,74 @@ import java.util.*;
 public class AssertTest {
 
     @Test
-    public void notNull() {
-
-        try {
-            Assert.notNull(10);
-        } catch (IllegalArgumentException iae) {
-            return;
-        }
-
-        try {
-            Assert.notNull(null);
-        } catch (IllegalArgumentException iae) {
-            return;
-        }
-
-        org.junit.Assert.fail();
-    }
-
-    @Test
-    public void mustBeofType() {
+    public void assertIsNull() {
 
         boolean isTestPassed = true;
 
         try {
-            Assert.mustBeofType(5);
-        } catch (IllegalArgumentException iae) {
-            isTestPassed = true;
-        }
-
-        try {
-            Assert.mustBeofType(10, Integer.class);
+            Assert.assertNull(null);
         } catch (IllegalArgumentException iae) {
             isTestPassed = false;
         }
 
         try {
-            Assert.mustBeofType(20, Double.class);
-        } catch (IllegalArgumentException iae) {
+            Assert.assertNull(new Object());
+            isTestPassed = false;
+        } catch (AssertionError iae) {
+            isTestPassed &= true;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertNotNull() {
+
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertNotNull(10);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNotNull(null);
+            isTestPassed = false;
+        } catch (AssertionError iae) {
+            isTestPassed &= true;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertOfType() {
+
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertType(5);
+        } catch (AssertionError iae) {
+            isTestPassed = true;
+        }
+
+        try {
+            Assert.assertType(10, Integer.class);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertType(20, Double.class);
+        } catch (AssertionError iae) {
             isTestPassed &= true;
         }
 
         try {
-            Assert.mustBeofType(new Object(), Object.class);
+            Assert.assertType(new Object(), Object.class);
             isTestPassed &= true;
-        } catch (IllegalArgumentException iae) {
+        } catch (AssertionError iae) {
             isTestPassed &= false;
         }
 
@@ -79,7 +103,7 @@ public class AssertTest {
 
 
     @Test
-    public void notEmpty() {
+    public void assertNotEmpty() {
 
         boolean isTestPassed = true;
 
@@ -95,9 +119,9 @@ public class AssertTest {
         //Must be empty
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
-                Assert.notEmpty(obj);
+                Assert.assertNotEmpty(obj);
                 isTestPassed = false;
-            } catch (IllegalArgumentException iae) {
+            } catch (AssertionError iae) {
                 isTestPassed &= true;
             }
         }
@@ -114,9 +138,9 @@ public class AssertTest {
         //Must be not empty
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
-                Assert.notEmpty(obj);
+                Assert.assertNotEmpty(obj);
                 isTestPassed &= true;
-            } catch (IllegalArgumentException iae) {
+            } catch (AssertionError iae) {
                 isTestPassed = false;
             }
         }
@@ -125,4 +149,60 @@ public class AssertTest {
         org.junit.Assert.assertTrue(isTestPassed);
     }
 
+
+    @Test
+    public void assertEmpty() {
+
+        boolean isTestPassed = true;
+
+        String string = "";
+        String[] array = {};
+        int[] primitiveArray = {};
+        ArrayList<Object> list = new ArrayList<Object>();
+        TreeSet<Object> set = new TreeSet<Object>();
+        Vector<Object> vector = new Vector<Object>();
+        HashMap<Object, Object> map = new HashMap<Object, Object>();
+        EmptyObj emptyObj = new EmptyObj(true);
+
+        //Must be assertEmpty
+        for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
+            try {
+                Assert.assertEmpty(obj);
+                isTestPassed &= true;
+            } catch (AssertionError iae) {
+                isTestPassed = false;
+            }
+        }
+
+        string = "\0";
+        array = new String[]{string};
+        primitiveArray = new int[]{10, 20, 30};
+        list.add(string);
+        set.add(string);
+        vector.add(string);
+        map.put(string, string);
+        emptyObj = new EmptyObj(false);
+
+        //Must be not assertEmpty
+        for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
+            try {
+                Assert.assertEmpty(obj);
+                isTestPassed = false;
+            } catch (AssertionError iae) {
+                isTestPassed &= true;
+            }
+        }
+
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+
+    @Test
+    public void isEmpty() {
+        org.junit.Assert.assertTrue(Assert.isEmpty(""));
+        org.junit.Assert.assertFalse(Assert.isEmpty("\0x00"));
+        org.junit.Assert.assertTrue(Assert.isEmpty(new EmptyObj(true)));
+        org.junit.Assert.assertFalse(Assert.isEmpty(new EmptyObj(false)));
+    }
 }

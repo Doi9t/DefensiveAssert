@@ -26,31 +26,51 @@ import java.util.Map;
  * Created by yannick on 2/24/2017.
  */
 public class Assert {
-    private static final String CANNOT_BE_EMPTY = "The %s cannot be empty !";
 
     /**
-     * Check if the object is null, throw an exception if it is the case.
+     * Check if the object is null, throw an exception if it is not the case.
+     *
      * @param obj
      * @throws IllegalArgumentException
      */
-    public static void notNull(Object obj) throws IllegalArgumentException {
+    public static void assertNull(Object obj) throws AssertionError {
+        if (obj != null) {
+            throw new AssertionError("The object must be null !");
+        }
+    }
+
+    /**
+     * Check if the object is null, throw an exception if it is the case.
+     *
+     * @param obj
+     * @throws IllegalArgumentException
+     */
+    public static void assertNotNull(Object obj) throws AssertionError {
         if (obj == null) {
-            throw new IllegalArgumentException("The object cannot be null !");
+            throw new AssertionError("The object cannot be null !");
         }
     }
 
     /**
      * Check if the object is of the type (class), throw an exception if not the case.
+     *
      * @param obj
      * @param type
      * @throws IllegalArgumentException
      */
-    public static void mustBeofType(Object obj, Class<?>... type) throws IllegalArgumentException {
-        notNull(obj);
-        notEmpty(type);
+    public static void assertType(Object obj, Class<?>... type) throws AssertionError {
+        assertNotNull(obj);
+        assertNotEmpty(type);
 
         if (!Arrays.asList(type).contains(obj.getClass())) {
-            throw new IllegalArgumentException("The object is not of the requested type !");
+            throw new AssertionError("The object is not of the requested type !");
+        }
+    }
+
+
+    public static void assertEmpty(Object obj) throws AssertionError {
+        if (!isEmpty(obj)) {
+            throw new AssertionError("The object need to be empty !");
         }
     }
 
@@ -60,8 +80,21 @@ public class Assert {
      * @param obj
      * @throws IllegalArgumentException
      */
-    public static void notEmpty(Object obj) throws IllegalArgumentException {
-        notNull(obj);
+    public static void assertNotEmpty(Object obj) throws AssertionError {
+        if (isEmpty(obj)) {
+            throw new AssertionError("The object cannot be empty !");
+        }
+    }
+
+
+    /**
+     * A utility function to check if the value is empty or not
+     *
+     * @param obj
+     * @throws IllegalArgumentException
+     */
+    public static boolean isEmpty(Object obj) throws AssertionError {
+        assertNotNull(obj);
 
         boolean isString = obj instanceof String;
         boolean isArray = obj.getClass().isArray();
@@ -69,13 +102,13 @@ public class Assert {
         boolean isMap = obj instanceof Map;
 
         if (isString && "".equals(obj)) {
-            throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, "string"));
+            return true;
         } else if (isArray && Array.getLength(obj) == 0) {
-            throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, "collection"));
+            return true;
         } else if (isCollection && ((Collection) obj).isEmpty()) {
-            throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, "collection"));
+            return true;
         } else if (isMap && ((Map) obj).isEmpty()) {
-            throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, "map"));
+            return true;
         } else if (!isString && !isArray && !isMap && !isCollection) {
             try {
                 Class<?> clazz = obj.getClass();
@@ -83,11 +116,12 @@ public class Assert {
                 Boolean isEmpty = (Boolean) isEmptyMethod.invoke(obj);
 
                 if (isEmpty == null || isEmpty) {
-                    throw new IllegalArgumentException(String.format(CANNOT_BE_EMPTY, clazz.getSimpleName()));
+                    return true;
                 }
             } catch (Exception e) {
-                throw new IllegalArgumentException(e);
+                throw new AssertionError(e);
             }
         }
+        return false;
     }
 }
