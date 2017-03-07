@@ -100,28 +100,27 @@ public class Assert {
         boolean isArray = obj.getClass().isArray();
         boolean isCollection = obj instanceof Collection;
         boolean isMap = obj instanceof Map;
+        boolean value = false;
 
         if (isString && "".equals(obj)) {
-            return true;
+            value = true;
         } else if (isArray && Array.getLength(obj) == 0) {
-            return true;
+            value = true;
         } else if (isCollection && ((Collection) obj).isEmpty()) {
-            return true;
+            value = true;
         } else if (isMap && ((Map) obj).isEmpty()) {
-            return true;
+            value = true;
         } else if (!isString && !isArray && !isMap && !isCollection) {
             try {
                 Class<?> clazz = obj.getClass();
                 Method isEmptyMethod = clazz.getMethod("isEmpty");
                 Boolean isEmpty = (Boolean) isEmptyMethod.invoke(obj);
 
-                if (isEmpty == null || isEmpty) {
-                    return true;
-                }
+                value = (isEmpty == null || isEmpty);
             } catch (Exception e) {
                 throw new AssertionError(e);
             }
         }
-        return false;
+        return value;
     }
 }
