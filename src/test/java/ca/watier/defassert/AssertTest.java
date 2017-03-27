@@ -27,13 +27,369 @@ import java.util.*;
 public class AssertTest {
 
     @Test
-    public void assertIsNull() {
+    public void assertNumberSuperiorTo() {
+        boolean isTestPassed = true;
 
+        /*
+         * Supposed to fail
+         */
+        try {
+            Assert.assertNumberSuperiorTo( 1000000d, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 10, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 5, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 5d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo(10, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo(10d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        /*
+         * Supposed to pass
+         */
+        try {
+            Assert.assertNumberSuperiorTo( 11, 10);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 11d, 10d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 1000000000, 10);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo( 1000000000d, 10d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+
+    @Test
+    public void assertNumberSuperiorOrEqualsTo() {
+        boolean isTestPassed = true;
+
+        /*
+         * Supposed to fail
+         */
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 1000000d, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 10, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 5, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 5d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        /*
+         * Supposed to pass
+         */
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo(10, 10);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo(10d, 10d);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 11, 10);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 11d, 10d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 1000000000, 10);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberSuperiorOrEqualsTo( 1000000000d, 10d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertNumbersSameType() {
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertNumbersSameType(10, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumbersSameType(10d, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumbersSameType(10, 10);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumbersSameType(10d, 10d);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertNumbersNotSameType() {
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertNumbersNotSameType(10, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumbersNotSameType(10d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumbersNotSameType(10, 10d);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumbersNotSameType(10d, 10);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertNumberInferiorTo() {
+        boolean isTestPassed = true;
+
+        /*
+         * Supposed to fail
+         */
+        try {
+            Assert.assertNumberInferiorTo(10, 1000000d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10d, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10, 5);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10d, 5d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+
+        /*
+         * Supposed to pass
+         */
+        try {
+            Assert.assertNumberInferiorTo(10, 11);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10d, 11d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10, 1000000000);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorTo(10d, 1000000000d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+
+    @Test
+    public void assertNumberInferiorOrEqualsTo() {
+        boolean isTestPassed = true;
+
+        /*
+         * Supposed to fail
+         */
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10, 1000000d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10d, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10, 5);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10d, 5d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        /*
+         * Supposed to pass
+         */
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10, 10);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10d, 10d);
+        } catch (AssertionError ignored) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10, 11);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10d, 11d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10, 1000000000);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberInferiorOrEqualsTo(10d, 1000000000d);
+        } catch (AssertionError ae) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertIsNull() {
         boolean isTestPassed = true;
 
         try {
             Assert.assertNull(null);
-        } catch (IllegalArgumentException iae) {
+        } catch (AssertionError iae) {
             isTestPassed = false;
         }
 
@@ -43,6 +399,90 @@ public class AssertTest {
         } catch (AssertionError iae) {
             isTestPassed &= true;
         }
+
+
+        try {
+            Assert.assertNull(null, new Object(), null);
+            isTestPassed = false;
+        } catch (AssertionError iae) {
+            isTestPassed &= true;
+        }
+
+
+        try {
+            Assert.assertNull(null, null, null);
+            isTestPassed &= true;
+
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+
+    @Test
+    public void assertNumberNotEquals() {
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertNumberNotEquals(10, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberNotEquals(10d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+
+        try {
+            Assert.assertNumberNotEquals(11, 10);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberNotEquals(11d, 10d);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+
+        org.junit.Assert.assertTrue(isTestPassed);
+    }
+
+    @Test
+    public void assertNumberEquals() {
+        boolean isTestPassed = true;
+
+        try {
+            Assert.assertNumberEquals(11, 10);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberEquals(11d, 10d);
+            isTestPassed = false;
+        } catch (AssertionError ignored) {
+        }
+
+
+        try {
+            Assert.assertNumberEquals(10, 10);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
+        try {
+            Assert.assertNumberEquals(10d, 10d);
+        } catch (AssertionError iae) {
+            isTestPassed = false;
+        }
+
 
         org.junit.Assert.assertTrue(isTestPassed);
     }
@@ -60,6 +500,14 @@ public class AssertTest {
 
         try {
             Assert.assertNotNull(null);
+            isTestPassed = false;
+        } catch (AssertionError iae) {
+            isTestPassed &= true;
+        }
+
+
+        try {
+            Assert.assertNotNull(new Object(), null, new Object());
             isTestPassed = false;
         } catch (AssertionError iae) {
             isTestPassed &= true;
@@ -204,5 +652,6 @@ public class AssertTest {
         org.junit.Assert.assertFalse(Assert.isEmpty("\0x00"));
         org.junit.Assert.assertTrue(Assert.isEmpty(new EmptyObj(true)));
         org.junit.Assert.assertFalse(Assert.isEmpty(new EmptyObj(false)));
+        org.junit.Assert.assertNull(Assert.isEmpty(new Object()));
     }
 }
