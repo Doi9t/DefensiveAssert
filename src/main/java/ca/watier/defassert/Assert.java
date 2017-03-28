@@ -28,6 +28,9 @@ import java.util.Map;
 public class Assert {
 
     private static final String ERROR_SUPERIOR = "%s must be superior THAN %s !";
+    private static final String ERROR_SUPERIOR_EQUALS = "%s must be superior or equals THAN %s !";
+    private static final String ERROR_INFERIOR = "%s must be inferior THAN %s !";
+    private static final String ERROR_INFERIOR_EQUALS = "%s must be inferior or equals THAN %s !";
     private static final String ERROR_CANNOT_BE_NULL = "The object cannot be null !";
     private static final String ERROR_MUST_BE_NULL = "The object must be null !";
     private static final String THE_NUMBER_MUST_BE_EQUALS = "The number must be equals !";
@@ -36,6 +39,8 @@ public class Assert {
     private static final String THE_OBJECT_NEED_TO_BE_EMPTY = "The object need to be empty !";
     private static final String THE_OBJECT_CANNOT_BE_EMPTY = "The object cannot be empty !";
     private static final String THE_VALUES_MUST_BE_THE_SAME_TYPE = "The values must be the same type !";
+    private static final String THE_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO = "%s MUST be between or equals to %s and %s";
+    private static final String THE_VALUE_MUST_BE_BETWEEN = "%s MUST be between %s and %s";
 
     /**
      * Check if the number is superior than the other number, throw an exception if it is not the case.
@@ -87,6 +92,37 @@ public class Assert {
         assertNotNull(value, lowestValue);
         assertSuperiorInferiorNumber(value, lowestValue, false, true);
     }
+
+
+    /**
+     * Check if the number is between the two other numbers, throw an exception if it is not the case.
+     *
+     * @param value
+     * @param lowestValue
+     * @param highestNumber
+     * @throws IllegalArgumentException
+     */
+    public static void assertNumberBetweenTo(Number value, Number lowestValue, Number highestNumber) throws AssertionError {
+        assertNotNull(value, lowestValue, highestNumber);
+        assertNumbersSameType(value, lowestValue, highestNumber);
+        assertBetweenNumber(value, lowestValue, highestNumber, false);
+    }
+
+
+    /**
+     * Check if the number is between or equals the two other numbers, throw an exception if it is not the case.
+     *
+     * @param value
+     * @param lowestValue
+     * @param highestNumber
+     * @throws IllegalArgumentException
+     */
+    public static void assertNumberBetweenOrEqualsTo(Number value, Number lowestValue, Number highestNumber) throws AssertionError {
+        assertNotNull(value, lowestValue);
+        assertNumbersSameType(value, lowestValue, highestNumber);
+        assertBetweenNumber(value, lowestValue, highestNumber, true);
+    }
+
 
     /**
      * Check is the numbers are equals
@@ -182,6 +218,8 @@ public class Assert {
      * @throws AssertionError
      */
     public static void assertEmpty(Object obj) throws AssertionError {
+        assertNotNull(obj);
+
         if (!isEmpty(obj)) {
             throw new AssertionError(THE_OBJECT_NEED_TO_BE_EMPTY);
         }
@@ -194,6 +232,8 @@ public class Assert {
      * @throws IllegalArgumentException
      */
     public static void assertNotEmpty(Object obj) throws AssertionError {
+        assertNotNull(obj);
+
         if (isEmpty(obj)) {
             throw new AssertionError(THE_OBJECT_CANNOT_BE_EMPTY);
         }
@@ -238,19 +278,19 @@ public class Assert {
     }
 
     /**
-     * Check if the number are the same type (floating vs integer)
+     * Check if the numbers are the same type (floating vs integer)
      *
-     * @param firstNumber
-     * @param secondNumber
+     * @param numbers
      */
-    public static void assertNumbersSameType(Number firstNumber, Number secondNumber) {
-        assertNotNull(firstNumber, secondNumber);
+    public static void assertNumbersSameType(Number... numbers) {
+        assertNotEmpty(numbers);
 
-        boolean isValueFloatingPoint = firstNumber instanceof Double || firstNumber instanceof Float;
-        boolean isLowestValueFloatingPoint = secondNumber instanceof Double || secondNumber instanceof Float;
-
-        if (isValueFloatingPoint != isLowestValueFloatingPoint) {
-            throw new AssertionError(THE_VALUES_MUST_BE_THE_SAME_TYPE);
+        for (Number number : numbers) {
+            for (Number innerNumber : numbers) {
+                if (!number.getClass().equals(innerNumber.getClass())) {
+                    throw new AssertionError(THE_VALUES_MUST_BE_THE_SAME_TYPE);
+                }
+            }
         }
     }
 
@@ -275,86 +315,148 @@ public class Assert {
     /**
      * A utility function that check if the number is inferior / superior than the other number
      *
-     * @param number1
-     * @param number2
+     * @param value
+     * @param highestNumber
      * @param isSuperior
      * @param canBeEquals
      * @throws AssertionError
      */
-    private static void assertSuperiorInferiorNumber(Number number1, Number number2, boolean isSuperior, boolean canBeEquals) throws AssertionError {
-        assertNotNull(number1, number2);
-        assertNumbersSameType(number1, number2);
-
-        boolean isValueFloatingPoint = number1 instanceof Double || number1 instanceof Float;
+    private static void assertSuperiorInferiorNumber(Number value, Number highestNumber, boolean isSuperior, boolean canBeEquals) throws AssertionError {
+        assertNotNull(value, highestNumber);
+        assertNumbersSameType(value, highestNumber);
 
         if (canBeEquals) {
             if (isSuperior) {
-                if (isValueFloatingPoint) {
-                    double doubleValue = number1.doubleValue();
-                    double doubleLowestValue = number2.doubleValue();
-
-                    if (doubleValue < doubleLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
-                } else {
-                    long longValue = number1.longValue();
-                    long longLowestValue = number2.longValue();
-
-                    if (longValue < longLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
+                if (!isNumberSuperiorOrEqualsTo(value, highestNumber)) {
+                    throw new AssertionError(String.format(ERROR_SUPERIOR_EQUALS, value, highestNumber));
                 }
             } else {
-                if (isValueFloatingPoint) {
-                    double doubleValue = number1.doubleValue();
-                    double doubleLowestValue = number2.doubleValue();
-
-                    if (doubleValue > doubleLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
-                } else {
-                    long longValue = number1.longValue();
-                    long longLowestValue = number2.longValue();
-
-                    if (longValue > longLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
+                if (!isNumberInferiorOrEqualsTo(value, highestNumber)) {
+                    throw new AssertionError(String.format(ERROR_INFERIOR_EQUALS, value, highestNumber));
                 }
             }
         } else {
             if (isSuperior) {
-                if (isValueFloatingPoint) {
-                    double doubleValue = number1.doubleValue();
-                    double doubleLowestValue = number2.doubleValue();
-
-                    if (doubleValue <= doubleLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
-                } else {
-                    long longValue = number1.longValue();
-                    long longLowestValue = number2.longValue();
-
-                    if (longValue <= longLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
+                if (!isNumberSuperiorTo(value, highestNumber)) {
+                    throw new AssertionError(String.format(ERROR_SUPERIOR, value, highestNumber));
                 }
             } else {
-                if (isValueFloatingPoint) {
-                    double doubleValue = number1.doubleValue();
-                    double doubleLowestValue = number2.doubleValue();
-
-                    if (doubleValue >= doubleLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
-                } else {
-                    long longValue = number1.longValue();
-                    long longLowestValue = number2.longValue();
-
-                    if (longValue >= longLowestValue) {
-                        throw new AssertionError(String.format(ERROR_SUPERIOR, number1, number2));
-                    }
+                if (!isNumberInferiorTo(value, highestNumber)) {
+                    throw new AssertionError(String.format(ERROR_INFERIOR, value, highestNumber));
                 }
             }
         }
+    }
+
+    /**
+     * A utility function that check if the number is between the other numbers
+     *
+     * @param value
+     * @param lowestValue
+     * @param highestNumber
+     * @param canBeEquals
+     */
+    private static void assertBetweenNumber(Number value, Number lowestValue, Number highestNumber, boolean canBeEquals) {
+        assertNotNull(value, lowestValue, highestNumber);
+        assertNumbersSameType(value, lowestValue, highestNumber);
+
+        if (canBeEquals) {
+            if (!(isNumberInferiorOrEqualsTo(lowestValue, value) && isNumberSuperiorOrEqualsTo(highestNumber, value))) {
+                throw new AssertionError(String.format(THE_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO, value, lowestValue, highestNumber));
+            }
+        } else {
+            if (!(isNumberInferiorTo(lowestValue, value) && isNumberSuperiorTo(highestNumber, value))) {
+                throw new AssertionError(String.format(THE_VALUE_MUST_BE_BETWEEN, value, lowestValue, highestNumber));
+            }
+        }
+    }
+
+    /**
+     * A utility function that check if the number is inferior to the other number
+     *
+     * @param value
+     * @param mark
+     * @return
+     */
+    public static boolean isNumberInferiorTo(Number value, Number mark) {
+        assertNotNull(value, mark);
+        assertNumbersSameType(value, mark);
+
+        boolean isNumberInferiorTo = true;
+
+        if (value instanceof Double || value instanceof Float) {
+            isNumberInferiorTo = value.doubleValue() < mark.doubleValue();
+        } else {
+            isNumberInferiorTo = value.longValue() < mark.longValue();
+        }
+
+        return isNumberInferiorTo;
+    }
+
+
+    /**
+     * A utility function that check if the number is superior to the other number
+     *
+     * @param value
+     * @param mark
+     * @return
+     */
+    public static boolean isNumberSuperiorTo(Number value, Number mark) {
+        assertNotNull(value, mark);
+        assertNumbersSameType(value, mark);
+
+        boolean isNumberInferiorTo = true;
+
+        if (value instanceof Double || value instanceof Float) {
+            isNumberInferiorTo = value.doubleValue() > mark.doubleValue();
+        } else {
+            isNumberInferiorTo = value.longValue() > mark.longValue();
+        }
+
+        return isNumberInferiorTo;
+    }
+
+    /**
+     * A utility function that check if the number is inferior or equals to the other number
+     *
+     * @param value
+     * @param mark
+     * @return
+     */
+    public static boolean isNumberInferiorOrEqualsTo(Number value, Number mark) {
+        assertNotNull(value, mark);
+        assertNumbersSameType(value, mark);
+
+        boolean isNumberInferiorTo = true;
+
+        if (value instanceof Double || value instanceof Float) {
+            isNumberInferiorTo = value.doubleValue() <= mark.doubleValue();
+        } else {
+            isNumberInferiorTo = value.longValue() <= mark.longValue();
+        }
+
+        return isNumberInferiorTo;
+    }
+
+    /**
+     * A utility function that check if the number is superior or equals to the other number
+     *
+     * @param value
+     * @param mark
+     * @return
+     */
+    public static boolean isNumberSuperiorOrEqualsTo(Number value, Number mark) {
+        assertNotNull(value, mark);
+        assertNumbersSameType(value, mark);
+
+        boolean isNumberInferiorTo = true;
+
+        if (value instanceof Double || value instanceof Float) {
+            isNumberInferiorTo = value.doubleValue() >= mark.doubleValue();
+        } else {
+            isNumberInferiorTo = value.longValue() >= mark.longValue();
+        }
+
+        return isNumberInferiorTo;
     }
 }

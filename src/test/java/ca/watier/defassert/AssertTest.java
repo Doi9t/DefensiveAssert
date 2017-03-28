@@ -25,536 +25,590 @@ import java.util.*;
  * Created by yannick on 2/24/2017.
  */
 public class AssertTest {
+    @Test
+    public void assertNumberBetweenTo() throws Exception {
+        try {
+            Assert.assertNumberBetweenTo(10, 0, 50);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(10d, 0d, 50d);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(1000, 0, 50);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(1000d, 0d, 50d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(-1000, 0, 50);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(-1000d, 0d, 50d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(0, 0, 50);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(0d, 0d, 50d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(50, 0, 50);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberBetweenTo(50d, 0d, 50d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+    }
 
     @Test
-    public void assertNumberSuperiorTo() {
-        boolean isTestPassed = true;
-
-        /*
-         * Supposed to fail
-         */
+    public void assertNumberBetweenOrEqualsTo() throws Exception {
         try {
-            Assert.assertNumberSuperiorTo( 1000000d, 10);
-            isTestPassed = false;
+            Assert.assertNumberBetweenOrEqualsTo(10, 0, 50);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(10d, 0d, 50d);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(0, 0, 50);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(0d, 0d, 50d);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(50, 0, 50);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(50d, 0d, 50d);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNumberBetweenOrEqualsTo(1000, 0, 50);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 10, 10d);
-            isTestPassed = false;
+            Assert.assertNumberBetweenOrEqualsTo(1000d, 0d, 50d);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 5, 10);
-            isTestPassed = false;
+            Assert.assertNumberBetweenOrEqualsTo(-1000, 0, 50);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 5d, 10d);
-            isTestPassed = false;
+            Assert.assertNumberBetweenOrEqualsTo(-1000d, 0d, 50d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+    }
+
+    /**
+     * Not the best way, but had to find a way to throw an exception in a try without interfering with the "AssertionError"
+     * (Cannot use "org.junit.Assert.fail() into a try with a catch on an "AssertionError")
+     *
+     * @throws Exception
+     */
+    private void fail() throws Exception {
+        throw new Exception("The test has failed !");
+    }
+
+    @Test
+    public void assertNumberSuperiorTo() throws Exception {
+        try {
+            Assert.assertNumberSuperiorTo(1000000d, 10);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo(10, 10d);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo(5, 10);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNumberSuperiorTo(5d, 10d);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberSuperiorTo(10, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberSuperiorTo(10d, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
-        /*
-         * Supposed to pass
-         */
         try {
-            Assert.assertNumberSuperiorTo( 11, 10);
+            Assert.assertNumberSuperiorTo(11, 10);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 11d, 10d);
+            Assert.assertNumberSuperiorTo(11d, 10d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 1000000000, 10);
+            Assert.assertNumberSuperiorTo(1000000000, 10);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorTo( 1000000000d, 10d);
+            Assert.assertNumberSuperiorTo(1000000000d, 10d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
     @Test
-    public void assertNumberSuperiorOrEqualsTo() {
-        boolean isTestPassed = true;
-
-        /*
-         * Supposed to fail
-         */
+    public void assertNumberSuperiorOrEqualsTo() throws Exception {
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 1000000d, 10);
-            isTestPassed = false;
+            Assert.assertNumberSuperiorOrEqualsTo(1000000d, 10);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 10, 10d);
-            isTestPassed = false;
+            Assert.assertNumberSuperiorOrEqualsTo(10, 10d);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 5, 10);
-            isTestPassed = false;
+            Assert.assertNumberSuperiorOrEqualsTo(5, 10);
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 5d, 10d);
-            isTestPassed = false;
+            Assert.assertNumberSuperiorOrEqualsTo(5d, 10d);
+            fail();
         } catch (AssertionError ignored) {
         }
 
-        /*
-         * Supposed to pass
-         */
         try {
             Assert.assertNumberSuperiorOrEqualsTo(10, 10);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberSuperiorOrEqualsTo(10d, 10d);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 11, 10);
+            Assert.assertNumberSuperiorOrEqualsTo(11, 10);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 11d, 10d);
+            Assert.assertNumberSuperiorOrEqualsTo(11d, 10d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 1000000000, 10);
+            Assert.assertNumberSuperiorOrEqualsTo(1000000000, 10);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
-            Assert.assertNumberSuperiorOrEqualsTo( 1000000000d, 10d);
+            Assert.assertNumberSuperiorOrEqualsTo(1000000000d, 10d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertNumbersSameType() {
-        boolean isTestPassed = true;
+    public void assertNumbersSameType() throws Exception {
 
         try {
             Assert.assertNumbersSameType(10, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumbersSameType(10d, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumbersSameType(10, 10);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumbersSameType(10d, 10d);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertNumbersNotSameType() {
-        boolean isTestPassed = true;
-
+    public void assertNumbersNotSameType() throws Exception {
         try {
             Assert.assertNumbersNotSameType(10, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumbersNotSameType(10d, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumbersNotSameType(10, 10d);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumbersNotSameType(10d, 10);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertNumberInferiorTo() {
-        boolean isTestPassed = true;
+    public void assertNumberInferiorTo() throws Exception {
 
-        /*
-         * Supposed to fail
-         */
         try {
             Assert.assertNumberInferiorTo(10, 1000000d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorTo(10d, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorTo(10, 5);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorTo(10d, 5d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorTo(10, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorTo(10d, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
-
-        /*
-         * Supposed to pass
-         */
         try {
             Assert.assertNumberInferiorTo(10, 11);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorTo(10d, 11d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorTo(10, 1000000000);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorTo(10d, 1000000000d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
     @Test
-    public void assertNumberInferiorOrEqualsTo() {
-        boolean isTestPassed = true;
+    public void assertNumberInferiorOrEqualsTo() throws Exception {
 
-        /*
-         * Supposed to fail
-         */
         try {
             Assert.assertNumberInferiorOrEqualsTo(10, 1000000d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10d, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10, 5);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10d, 5d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
-        /*
-         * Supposed to pass
-         */
         try {
             Assert.assertNumberInferiorOrEqualsTo(10, 10);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10d, 10d);
         } catch (AssertionError ignored) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10, 11);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10d, 11d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10, 1000000000);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberInferiorOrEqualsTo(10d, 1000000000d);
         } catch (AssertionError ae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertIsNull() {
-        boolean isTestPassed = true;
-
+    public void assertIsNull() throws Exception {
         try {
             Assert.assertNull(null);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNull(new Object());
-            isTestPassed = false;
-        } catch (AssertionError iae) {
-            isTestPassed &= true;
+            fail();
+        } catch (AssertionError ignored) {
         }
-
 
         try {
             Assert.assertNull(null, new Object(), null);
-            isTestPassed = false;
-        } catch (AssertionError iae) {
-            isTestPassed &= true;
+            fail();
+        } catch (AssertionError ignored) {
         }
-
 
         try {
             Assert.assertNull(null, null, null);
-            isTestPassed &= true;
-
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
     @Test
-    public void assertNumberNotEquals() {
-        boolean isTestPassed = true;
+    public void assertNumberNotEquals() throws Exception {
 
         try {
             Assert.assertNumberNotEquals(10, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberNotEquals(10d, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
-
 
         try {
             Assert.assertNumberNotEquals(11, 10);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberNotEquals(11d, 10d);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertNumberEquals() {
-        boolean isTestPassed = true;
+    public void assertNumberEquals() throws Exception {
 
         try {
             Assert.assertNumberEquals(11, 10);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
 
         try {
             Assert.assertNumberEquals(11d, 10d);
-            isTestPassed = false;
+            fail();
         } catch (AssertionError ignored) {
         }
-
 
         try {
             Assert.assertNumberEquals(10, 10);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNumberEquals(10d, 10d);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
-
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertNotNull() {
-
-        boolean isTestPassed = true;
-
+    public void assertNotNull() throws Exception {
         try {
             Assert.assertNotNull(10);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertNotNull(null);
-            isTestPassed = false;
-        } catch (AssertionError iae) {
-            isTestPassed &= true;
+            org.junit.Assert.fail();
+        } catch (AssertionError ignored) {
         }
 
 
         try {
             Assert.assertNotNull(new Object(), null, new Object());
-            isTestPassed = false;
-        } catch (AssertionError iae) {
-            isTestPassed &= true;
+            fail();
+        } catch (AssertionError ignored) {
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
     @Test
-    public void assertOfType() {
-
-        boolean isTestPassed = true;
+    public void assertOfType() throws Exception {
 
         try {
             Assert.assertType(5);
+            fail();
         } catch (AssertionError iae) {
-            isTestPassed = true;
         }
 
         try {
             Assert.assertType(10, Integer.class);
         } catch (AssertionError iae) {
-            isTestPassed = false;
+            org.junit.Assert.fail();
         }
 
         try {
             Assert.assertType(20, Double.class);
+            fail();
         } catch (AssertionError iae) {
-            isTestPassed &= true;
         }
 
         try {
             Assert.assertType(new Object(), Object.class);
-            isTestPassed &= true;
         } catch (AssertionError iae) {
-            isTestPassed &= false;
+            org.junit.Assert.fail();
         }
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
     @Test
-    public void assertNotEmpty() {
-
-        boolean isTestPassed = true;
-
+    public void assertNotEmpty() throws Exception {
         String string = "";
         String[] array = {};
         int[] primitiveArray = {};
@@ -568,9 +622,8 @@ public class AssertTest {
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
                 Assert.assertNotEmpty(obj);
-                isTestPassed = false;
-            } catch (AssertionError iae) {
-                isTestPassed &= true;
+                fail();
+            } catch (AssertionError ignored) {
             }
         }
 
@@ -587,22 +640,15 @@ public class AssertTest {
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
                 Assert.assertNotEmpty(obj);
-                isTestPassed &= true;
             } catch (AssertionError iae) {
-                isTestPassed = false;
+                org.junit.Assert.fail();
             }
         }
-
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
     @Test
-    public void assertEmpty() {
-
-        boolean isTestPassed = true;
-
+    public void assertEmpty() throws Exception {
         String string = "";
         String[] array = {};
         int[] primitiveArray = {};
@@ -616,9 +662,8 @@ public class AssertTest {
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
                 Assert.assertEmpty(obj);
-                isTestPassed &= true;
             } catch (AssertionError iae) {
-                isTestPassed = false;
+                org.junit.Assert.fail();
             }
         }
 
@@ -635,14 +680,10 @@ public class AssertTest {
         for (Object obj : Arrays.asList(string, array, primitiveArray, list, set, vector, map, emptyObj)) {
             try {
                 Assert.assertEmpty(obj);
-                isTestPassed = false;
-            } catch (AssertionError iae) {
-                isTestPassed &= true;
+                fail();
+            } catch (AssertionError ignored) {
             }
         }
-
-
-        org.junit.Assert.assertTrue(isTestPassed);
     }
 
 
