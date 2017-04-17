@@ -25,6 +25,79 @@ import java.util.*;
  * Created by yannick on 2/24/2017.
  */
 public class AssertTest {
+
+
+    @Test
+    public void assertNotEqualsString() throws Exception {
+
+        try {
+            Assert.assertNotEquals("", "a");
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNotEquals("a", null);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNotEquals(null, "a");
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertNotEquals("a", "a");
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertNotEquals(null, null);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+    }
+
+    @Test
+    public void assertEqualsString() throws Exception {
+
+        try {
+            Assert.assertEquals("a", "");
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertEquals(null, "");
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertEquals("", null);
+            fail();
+        } catch (AssertionError ignored) {
+        }
+
+        try {
+            Assert.assertEquals("a", "a");
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+        try {
+            Assert.assertEquals(null, null);
+        } catch (AssertionError ignored) {
+            org.junit.Assert.fail();
+        }
+
+    }
+
+
     @Test
     public void assertNumberBetweenTo() throws Exception {
         try {

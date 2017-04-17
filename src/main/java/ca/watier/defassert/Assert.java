@@ -33,14 +33,50 @@ public class Assert {
     private static final String ERROR_INFERIOR_EQUALS = "%s must be inferior or equals THAN %s !";
     private static final String ERROR_CANNOT_BE_NULL = "The object cannot be null !";
     private static final String ERROR_MUST_BE_NULL = "The object must be null !";
-    private static final String THE_NUMBER_MUST_BE_EQUALS = "The number must be equals !";
-    private static final String THE_NUMBER_MUST_NOT_BE_EQUALS = "The number must not be equals !";
-    private static final String THE_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE = "The object is not of the requested type !";
-    private static final String THE_OBJECT_NEED_TO_BE_EMPTY = "The object need to be empty !";
-    private static final String THE_OBJECT_CANNOT_BE_EMPTY = "The object cannot be empty !";
-    private static final String THE_VALUES_MUST_BE_THE_SAME_TYPE = "The values must be the same type !";
-    private static final String THE_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO = "%s MUST be between or equals to %s and %s";
-    private static final String THE_VALUE_MUST_BE_BETWEEN = "%s MUST be between %s and %s";
+    private static final String ERROR_NUMBER_MUST_BE_EQUALS = "The number must be equals !";
+    private static final String ERROR_NUMBER_MUST_NOT_BE_EQUALS = "The number must not be equals !";
+    private static final String ERROR_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE = "The object is not of the requested type !";
+    private static final String ERROR_OBJECT_NEED_TO_BE_EMPTY = "The object need to be empty !";
+    private static final String ERRROR_OBJECT_CANNOT_BE_EMPTY = "The object cannot be empty !";
+    private static final String ERROR_VALUES_MUST_BE_THE_SAME_TYPE = "The values must be the same type !";
+    private static final String ERROR_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO = "%s MUST be between or equals to %s and %s";
+    private static final String ERROR_VALUE_MUST_BE_BETWEEN = "%s MUST be between %s and %s";
+    private static final String ERROR_OBJECTS_ARE_NOT_EQUALS = "The %s are not equals !";
+    public static final String ERROR_OBJECTS_ARE_EQUALS = "The %s are equals !";
+
+
+    /**
+     * Check if the string are equals
+     *
+     * @param first
+     * @param second
+     * @throws IllegalArgumentException
+     */
+    public static void assertEquals(String first, String second) throws AssertionError {
+        if (first == null && second == null) {
+            return;
+        }
+        assertNotNull(first, second);
+
+        if (!first.equals(second)) {
+            throw new AssertionError(String.format(ERROR_OBJECTS_ARE_NOT_EQUALS, "strings"));
+        }
+    }
+
+    /**
+     * Check if the string are not equals
+     *
+     * @param first
+     * @param second
+     * @throws IllegalArgumentException
+     */
+    public static void assertNotEquals(String first, String second) throws AssertionError {
+
+        if (first == null && second == null || (first != null && first.equals(second)) || (second != null && second.equals(first))) {
+            throw new AssertionError(String.format(ERROR_OBJECTS_ARE_EQUALS, "strings"));
+        }
+    }
+
 
     /**
      * Check if the number is superior than the other number, throw an exception if it is not the case.
@@ -136,7 +172,7 @@ public class Assert {
         assertNumbersSameType(firstNumber, secondNumber);
 
         if (!firstNumber.equals(secondNumber)) {
-            throw new AssertionError(THE_NUMBER_MUST_BE_EQUALS);
+            throw new AssertionError(ERROR_NUMBER_MUST_BE_EQUALS);
         }
     }
 
@@ -153,7 +189,7 @@ public class Assert {
         assertNumbersSameType(firstNumber, secondNumber);
 
         if (firstNumber.equals(secondNumber)) {
-            throw new AssertionError(THE_NUMBER_MUST_NOT_BE_EQUALS);
+            throw new AssertionError(ERROR_NUMBER_MUST_NOT_BE_EQUALS);
         }
     }
 
@@ -207,7 +243,7 @@ public class Assert {
         assertNotEmpty(type);
 
         if (!Arrays.asList(type).contains(obj.getClass())) {
-            throw new AssertionError(THE_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE);
+            throw new AssertionError(ERROR_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE);
         }
     }
 
@@ -221,7 +257,7 @@ public class Assert {
         assertNotNull(obj);
 
         if (!isEmpty(obj)) {
-            throw new AssertionError(THE_OBJECT_NEED_TO_BE_EMPTY);
+            throw new AssertionError(ERROR_OBJECT_NEED_TO_BE_EMPTY);
         }
     }
 
@@ -235,7 +271,7 @@ public class Assert {
         assertNotNull(obj);
 
         if (isEmpty(obj)) {
-            throw new AssertionError(THE_OBJECT_CANNOT_BE_EMPTY);
+            throw new AssertionError(ERRROR_OBJECT_CANNOT_BE_EMPTY);
         }
     }
 
@@ -288,7 +324,7 @@ public class Assert {
         for (Number number : numbers) {
             for (Number innerNumber : numbers) {
                 if (!number.getClass().equals(innerNumber.getClass())) {
-                    throw new AssertionError(THE_VALUES_MUST_BE_THE_SAME_TYPE);
+                    throw new AssertionError(ERROR_VALUES_MUST_BE_THE_SAME_TYPE);
                 }
             }
         }
@@ -308,7 +344,7 @@ public class Assert {
         boolean isLowestValueFloatingPoint = secondNumber instanceof Double || secondNumber instanceof Float;
 
         if (isValueFloatingPoint == isLowestValueFloatingPoint) {
-            throw new AssertionError(THE_VALUES_MUST_BE_THE_SAME_TYPE);
+            throw new AssertionError(ERROR_VALUES_MUST_BE_THE_SAME_TYPE);
         }
     }
 
@@ -362,11 +398,11 @@ public class Assert {
 
         if (canBeEquals) {
             if (!(isNumberInferiorOrEqualsTo(lowestValue, value) && isNumberSuperiorOrEqualsTo(highestNumber, value))) {
-                throw new AssertionError(String.format(THE_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO, value, lowestValue, highestNumber));
+                throw new AssertionError(String.format(ERROR_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO, value, lowestValue, highestNumber));
             }
         } else {
             if (!(isNumberInferiorTo(lowestValue, value) && isNumberSuperiorTo(highestNumber, value))) {
-                throw new AssertionError(String.format(THE_VALUE_MUST_BE_BETWEEN, value, lowestValue, highestNumber));
+                throw new AssertionError(String.format(ERROR_VALUE_MUST_BE_BETWEEN, value, lowestValue, highestNumber));
             }
         }
     }
