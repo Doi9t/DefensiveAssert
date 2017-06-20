@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public class Assert {
 
+    public static final String ERROR_OBJECTS_ARE_EQUALS = "The %s are equals !";
     private static final String ERROR_SUPERIOR = "%s must be superior THAN %s !";
     private static final String ERROR_SUPERIOR_EQUALS = "%s must be superior or equals THAN %s !";
     private static final String ERROR_INFERIOR = "%s must be inferior THAN %s !";
@@ -42,8 +43,9 @@ public class Assert {
     private static final String ERROR_VALUE_MUST_BE_BETWEEN_OR_EQUALS_TO = "%s MUST be between or equals to %s and %s";
     private static final String ERROR_VALUE_MUST_BE_BETWEEN = "%s MUST be between %s and %s";
     private static final String ERROR_OBJECTS_ARE_NOT_EQUALS = "The %s are not equals !";
-    public static final String ERROR_OBJECTS_ARE_EQUALS = "The %s are equals !";
 
+    private Assert() {
+    }
 
     /**
      * Check if the string are equals
@@ -52,14 +54,35 @@ public class Assert {
      * @param second
      * @throws IllegalArgumentException
      */
+    //https://sonarcloud.io/organizations/default/rules#rule_key=squid%3AS2259
+    @java.lang.SuppressWarnings("squid:S2259") //Null pointers should not be dereferenced
     public static void assertEquals(String first, String second) throws AssertionError {
         if (first == null && second == null) {
             return;
         }
-        assertNotNull(first, second);
+        assertNotNull(first, second); //The value cannot be dereferenced, because of the check here (throws AssertionError)
 
         if (!first.equals(second)) {
             throw new AssertionError(String.format(ERROR_OBJECTS_ARE_NOT_EQUALS, "strings"));
+        }
+    }
+
+    /**
+     * Check if the object is null, throw an exception if it is the case.
+     *
+     * @param obj
+     * @throws IllegalArgumentException
+     */
+    public static void assertNotNull(Object... obj) throws AssertionError {
+
+        if (obj == null) {
+            throw new AssertionError(ERROR_CANNOT_BE_NULL);
+        }
+
+        for (Object o : obj) {
+            if (o == null) {
+                throw new AssertionError(ERROR_CANNOT_BE_NULL);
+            }
         }
     }
 
@@ -71,12 +94,10 @@ public class Assert {
      * @throws IllegalArgumentException
      */
     public static void assertNotEquals(String first, String second) throws AssertionError {
-
-        if (first == null && second == null || (first != null && first.equals(second)) || (second != null && second.equals(first))) {
+        if ((first == null && second == null) || (first != null && first.equals(second))) {
             throw new AssertionError(String.format(ERROR_OBJECTS_ARE_EQUALS, "strings"));
         }
     }
-
 
     /**
      * Check if the number is superior than the other number, throw an exception if it is not the case.
@@ -104,7 +125,6 @@ public class Assert {
         assertSuperiorInferiorNumber(value, lowestValue, false, false);
     }
 
-
     /**
      * Check if the number is superior or equals than the other number, throw an exception if it is not the case.
      *
@@ -129,7 +149,6 @@ public class Assert {
         assertSuperiorInferiorNumber(value, lowestValue, false, true);
     }
 
-
     /**
      * Check if the number is between the two other numbers, throw an exception if it is not the case.
      *
@@ -144,7 +163,6 @@ public class Assert {
         assertBetweenNumber(value, lowestValue, highestNumber, false);
     }
 
-
     /**
      * Check if the number is between or equals the two other numbers, throw an exception if it is not the case.
      *
@@ -158,7 +176,6 @@ public class Assert {
         assertNumbersSameType(value, lowestValue, highestNumber);
         assertBetweenNumber(value, lowestValue, highestNumber, true);
     }
-
 
     /**
      * Check is the numbers are equals
@@ -176,88 +193,20 @@ public class Assert {
         }
     }
 
-
     /**
-     * Check is the numbers are not equals
+     * Check if the numbers are the same type (floating vs integer)
      *
-     * @param firstNumber
-     * @param secondNumber
-     * @throws AssertionError
+     * @param numbers
      */
-    public static void assertNumberNotEquals(Number firstNumber, Number secondNumber) throws AssertionError {
-        assertNotNull(firstNumber, secondNumber);
-        assertNumbersSameType(firstNumber, secondNumber);
+    public static void assertNumbersSameType(Number... numbers) {
+        assertNotEmpty(numbers);
 
-        if (firstNumber.equals(secondNumber)) {
-            throw new AssertionError(ERROR_NUMBER_MUST_NOT_BE_EQUALS);
-        }
-    }
-
-
-    /**
-     * Check if the object is null, throw an exception if it is not the case.
-     *
-     * @param obj
-     * @throws IllegalArgumentException
-     */
-    public static void assertNull(Object... obj) throws AssertionError {
-        if (obj == null) {
-            return;
-        }
-
-        for (Object o : obj) {
-            if (o != null) {
-                throw new AssertionError(ERROR_MUST_BE_NULL);
+        for (Number number : numbers) {
+            for (Number innerNumber : numbers) {
+                if (!number.getClass().equals(innerNumber.getClass())) {
+                    throw new AssertionError(ERROR_VALUES_MUST_BE_THE_SAME_TYPE);
+                }
             }
-        }
-    }
-
-    /**
-     * Check if the object is null, throw an exception if it is the case.
-     *
-     * @param obj
-     * @throws IllegalArgumentException
-     */
-    public static void assertNotNull(Object... obj) throws AssertionError {
-
-        if (obj == null) {
-            throw new AssertionError(ERROR_CANNOT_BE_NULL);
-        }
-
-        for (Object o : obj) {
-            if (o == null) {
-                throw new AssertionError(ERROR_CANNOT_BE_NULL);
-            }
-        }
-    }
-
-    /**
-     * Check if the object is of the type (class), throw an exception if not the case.
-     *
-     * @param obj
-     * @param type
-     * @throws IllegalArgumentException
-     */
-    public static void assertType(Object obj, Class<?>... type) throws AssertionError {
-        assertNotNull(obj);
-        assertNotEmpty(type);
-
-        if (!Arrays.asList(type).contains(obj.getClass())) {
-            throw new AssertionError(ERROR_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE);
-        }
-    }
-
-    /**
-     * This assert try to find a "isEmpty" method. (Uses reflection when the type is not known)
-     *
-     * @param obj
-     * @throws AssertionError
-     */
-    public static void assertEmpty(Object obj) throws AssertionError {
-        assertNotNull(obj);
-
-        if (!isEmpty(obj)) {
-            throw new AssertionError(ERROR_OBJECT_NEED_TO_BE_EMPTY);
         }
     }
 
@@ -274,7 +223,6 @@ public class Assert {
             throw new AssertionError(ERRROR_OBJECT_CANNOT_BE_EMPTY);
         }
     }
-
 
     /**
      * A utility function to check if the value is empty or not, null if undefined
@@ -314,22 +262,68 @@ public class Assert {
     }
 
     /**
-     * Check if the numbers are the same type (floating vs integer)
+     * Check is the numbers are not equals
      *
-     * @param numbers
+     * @param firstNumber
+     * @param secondNumber
+     * @throws AssertionError
      */
-    public static void assertNumbersSameType(Number... numbers) {
-        assertNotEmpty(numbers);
+    public static void assertNumberNotEquals(Number firstNumber, Number secondNumber) throws AssertionError {
+        assertNotNull(firstNumber, secondNumber);
+        assertNumbersSameType(firstNumber, secondNumber);
 
-        for (Number number : numbers) {
-            for (Number innerNumber : numbers) {
-                if (!number.getClass().equals(innerNumber.getClass())) {
-                    throw new AssertionError(ERROR_VALUES_MUST_BE_THE_SAME_TYPE);
-                }
+        if (firstNumber.equals(secondNumber)) {
+            throw new AssertionError(ERROR_NUMBER_MUST_NOT_BE_EQUALS);
+        }
+    }
+
+    /**
+     * Check if the object is null, throw an exception if it is not the case.
+     *
+     * @param obj
+     * @throws IllegalArgumentException
+     */
+    public static void assertNull(Object... obj) throws AssertionError {
+        if (obj == null) {
+            return;
+        }
+
+        for (Object o : obj) {
+            if (o != null) {
+                throw new AssertionError(ERROR_MUST_BE_NULL);
             }
         }
     }
 
+    /**
+     * Check if the object is of the type (class), throw an exception if not the case.
+     *
+     * @param obj
+     * @param type
+     * @throws IllegalArgumentException
+     */
+    public static void assertType(Object obj, Class<?>... type) throws AssertionError {
+        assertNotNull(obj);
+        assertNotEmpty(type);
+
+        if (!Arrays.asList(type).contains(obj.getClass())) {
+            throw new AssertionError(ERROR_OBJECT_IS_NOT_OF_THE_REQUESTED_TYPE);
+        }
+    }
+
+    /**
+     * This assert try to find a "isEmpty" method. (Uses reflection when the type is not known)
+     *
+     * @param obj
+     * @throws AssertionError
+     */
+    public static void assertEmpty(Object obj) throws AssertionError {
+        assertNotNull(obj);
+
+        if (!isEmpty(obj)) {
+            throw new AssertionError(ERROR_OBJECT_NEED_TO_BE_EMPTY);
+        }
+    }
 
     /**
      * Check if the number are not the same type (floating vs integer)
