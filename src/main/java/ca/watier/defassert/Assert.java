@@ -54,14 +54,13 @@ public class Assert {
      * @param second
      * @throws IllegalArgumentException
      */
-    //https://sonarcloud.io/organizations/default/rules#rule_key=squid%3AS2259
-    @java.lang.SuppressWarnings("squid:S2259") //Null pointers should not be dereferenced
     public static void assertEquals(String first, String second) throws AssertionError {
         if (first == null && second == null) {
             return;
         }
-        assertNotNull(first, second); //The value cannot be dereferenced, because of the check here (throws AssertionError)
+        assertNotNull(first, second);
 
+        assert first != null;
         if (!first.equals(second)) {
             throw new AssertionError(String.format(ERROR_OBJECTS_ARE_NOT_EQUALS, "strings"));
         }
